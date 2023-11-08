@@ -91,7 +91,12 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                                  (route) => false);
                         },
                         child: const Text(
                           'Sign In',

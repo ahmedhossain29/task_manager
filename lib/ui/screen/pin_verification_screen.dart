@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:task_manager/ui/screen/login_screen.dart';
 import 'package:task_manager/ui/screen/set_password_screen.dart';
 import 'package:task_manager/ui/screen/sign_up_screen.dart';
 
@@ -47,6 +48,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                     height: 24,
                   ),
                   PinCodeTextField(
+                    backgroundColor: Colors.transparent,
                     length: 6,
                     animationType: AnimationType.fade,
                     pinTheme: PinTheme(
@@ -61,7 +63,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                     ),
                     animationDuration: const Duration(milliseconds: 300),
 
-                    enableActiveFill: true,
+                    enableActiveFill: false,
 
                     //controller: textEditingController,
                     onCompleted: (v) {
@@ -111,7 +113,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const SetPasswordScreen(),
+                                builder: (context) => const LoginScreen(),
                               ),
                                   (route) => false);
                         },

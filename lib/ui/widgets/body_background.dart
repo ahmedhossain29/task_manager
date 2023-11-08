@@ -9,6 +9,7 @@ class BodyBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+
       children: [
         SvgPicture.asset(
           'assets/images/background.svg',
@@ -16,6 +17,8 @@ class BodyBackground extends StatelessWidget {
           height: double.infinity,
           fit: BoxFit.cover,
         ),
+        // Positioned.fill(child: Container(color: Colors.black,)),
+
         child
       ],
     );
