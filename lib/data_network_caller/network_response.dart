@@ -1,3 +1,5 @@
+//data class
+
 class NetworkResponse {
   final int? statusCode;
   final bool isSuccess;
