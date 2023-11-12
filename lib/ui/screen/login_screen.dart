@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:task_manager/ui/screen/forgot_password_screen.dart';
 import 'package:task_manager/ui/screen/sign_up_screen.dart';
 
@@ -57,7 +56,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>MainBottomNavScreen(),),);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainBottomNavScreen(),
+                          ),
+                        );
                       },
                       child: const Icon(
                         Icons.arrow_circle_right_outlined,
@@ -70,7 +74,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   Center(
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const ForgotPasswordScreen(),),);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ForgotPasswordScreen(),
+                          ),
+                        );
                       },
                       child: const Text(
                         'Forgot Password?',
