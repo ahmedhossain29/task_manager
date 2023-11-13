@@ -102,6 +102,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: const InputDecoration(
                         hintText: 'Mobile',
                       ),
+                      //Phone no validation
                       validator: (String? value) {
                         if (value?.trim().isEmpty ?? true) {
                           return 'Enter your mobile number';
