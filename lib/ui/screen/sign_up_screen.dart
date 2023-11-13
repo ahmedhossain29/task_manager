@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/data_network_caller/network_caller.dart';
 import 'package:task_manager/data_network_caller/utility/urls.dart';
@@ -52,12 +53,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: const InputDecoration(
                         hintText: 'Email',
                       ),
-                      validator: (String? value) {
-                        if (value?.trim().isEmpty ?? true) {
-                          return 'Enter your valid email';
-                        }
-                        return null;
-                      },
+                      validator: (value) => EmailValidator.validate(value!)
+                          ? null
+                          : "Please enter a valid email",
+                      // validator: (String? value) {
+                      //   if (value?.trim().isEmpty ?? true) {
+                      //     return 'Enter your valid email';
+                      //   }
+                      //   return null;
+                      // },
                     ),
                     const SizedBox(
                       height: 16,
@@ -101,6 +105,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       validator: (String? value) {
                         if (value?.trim().isEmpty ?? true) {
                           return 'Enter your mobile number';
+                        }
+                        if (value!.length < 10) {
+                          return 'Enter your valid mobile number';
                         }
                         return null;
                       },
