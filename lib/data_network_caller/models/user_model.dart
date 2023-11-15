@@ -26,3 +26,5 @@ class UserModel {
     return data;
   }
 }
+
+//create by json to dart automatic
