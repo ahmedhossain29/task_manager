@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/data_network_caller/network_caller.dart';
 import 'package:task_manager/data_network_caller/utility/urls.dart';
+import 'package:task_manager/ui/screen/login_screen.dart';
 import 'package:task_manager/ui/widgets/snack_message.dart';
 
 import '../../data_network_caller/network_response.dart';
@@ -211,6 +212,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _clearTextFields();
         if (mounted) {
           showSnackMessage(context, 'Account has been created! Please login.');
+        }
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
         }
       } else {
         if (mounted) {

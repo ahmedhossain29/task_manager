@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../data_network_caller/models/user_model.dart';
 
 class AuthController {
+  //class variable
   static String? token;
   static UserModel? user;
 
