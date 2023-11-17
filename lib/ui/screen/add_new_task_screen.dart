@@ -103,7 +103,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
     );
   }
 
-  //Add Task
+  //Add New Task
 
   Future<void> createTask() async {
     if (_formKey.currentState!.validate()) {
