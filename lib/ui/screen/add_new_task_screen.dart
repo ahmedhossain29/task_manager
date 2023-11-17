@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/data_network_caller/network_caller.dart';
+import 'package:task_manager/data_network_caller/network_response.dart';
+import 'package:task_manager/data_network_caller/utility/urls.dart';
 import 'package:task_manager/ui/widgets/body_background.dart';
 import 'package:task_manager/ui/widgets/profile_widget.dart';
+import 'package:task_manager/ui/widgets/snack_message.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key});
@@ -10,6 +14,13 @@ class AddNewTaskScreen extends StatefulWidget {
 }
 
 class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
+  final TextEditingController _subjectTEController = TextEditingController();
+  final TextEditingController _descriptionTEController =
+      TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _createTaskInProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,44 +32,68 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
               child: SingleChildScrollView(
                   child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    Text(
-                      'Add New Task',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'Subject',
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 32,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      maxLines: 5,
-                      decoration: const InputDecoration(
-                        hintText: 'Description',
+                      Text(
+                        'Add New Task',
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Icon(Icons.arrow_circle_right_outlined),
+                      const SizedBox(
+                        height: 16,
                       ),
-                    ),
-                  ],
+                      TextFormField(
+                        controller: _subjectTEController,
+                        decoration: const InputDecoration(
+                          hintText: 'Subject',
+                        ),
+                        validator: (String? value) {
+                          if (value?.trim().isEmpty ?? true) {
+                            return 'Enter your subject';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: _descriptionTEController,
+                        maxLines: 5,
+                        decoration: const InputDecoration(
+                          hintText: 'Description',
+                        ),
+                        validator: (String? value) {
+                          if (value?.trim().isEmpty ?? true) {
+                            return 'Enter your subject';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Visibility(
+                          visible: _createTaskInProgress == false,
+                          replacement: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: createTask,
+                            child:
+                                const Icon(Icons.arrow_circle_right_outlined),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               )),
             ),
@@ -66,5 +101,44 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         ]),
       ),
     );
+  }
+
+  //Add Task
+
+  Future<void> createTask() async {
+    if (_formKey.currentState!.validate()) {
+      _createTaskInProgress = true;
+      if (mounted) {
+        setState(() {});
+      }
+      final NetworkResponse response =
+          await NetworkCaller().postRequest(Urls.createNewTask, body: {
+        "title": _subjectTEController.text.trim(),
+        "description": _descriptionTEController.text.trim(),
+        "status": "New"
+      });
+      _createTaskInProgress = false;
+      if (mounted) {
+        setState(() {});
+      }
+      if (response.isSuccess) {
+        _subjectTEController.clear();
+        _descriptionTEController.clear();
+        if (mounted) {
+          showSnackMessage(context, 'New task added!');
+        }
+      } else {
+        if (mounted) {
+          showSnackMessage(context, 'Create new Task failed! Try Again', true);
+        }
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _subjectTEController.dispose();
+    _descriptionTEController.dispose();
+    super.dispose();
   }
 }
