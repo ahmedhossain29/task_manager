@@ -3,14 +3,17 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:task_manager/app.dart';
 import 'package:task_manager/ui/controllers/auth_controller.dart';
+import 'package:task_manager/ui/screen/login_screen.dart';
 
 import 'network_response.dart';
 
 class NetworkCaller {
   Future<NetworkResponse> postRequest(String url,
-      {Map<String, dynamic>? body}) async {
+      {Map<String, dynamic>? body, bool isLogin = false}) async {
     try {
       Response response =
           await post(Uri.parse(url), body: jsonEncode(body), headers: {
@@ -24,6 +27,16 @@ class NetworkCaller {
             isSuccess: true,
             jsonResponse: jsonDecode(response.body),
             statusCode: 200);
+      } else if (response.statusCode == 401) {
+        if (isLogin == false) {
+          backToLogin();
+        }
+
+        return NetworkResponse(
+          isSuccess: false,
+          statusCode: response.statusCode,
+          jsonResponse: jsonDecode(response.body),
+        );
       } else {
         return NetworkResponse(
           isSuccess: false,
@@ -37,5 +50,14 @@ class NetworkCaller {
         errorMessage: e.toString(),
       );
     }
+  }
+
+// if any error show login Page
+  void backToLogin() async {
+    await AuthController.clearAuthData();
+    Navigator.pushAndRemoveUntil(
+        TaskManagerApp.navigationKey.currentContext!,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (route) => false);
   }
 }
