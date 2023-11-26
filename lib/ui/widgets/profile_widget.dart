@@ -3,8 +3,8 @@ import 'package:task_manager/ui/controllers/auth_controller.dart';
 import 'package:task_manager/ui/screen/edit_profile_screen.dart';
 import 'package:task_manager/ui/screen/login_screen.dart';
 
-class ProfileWidget extends StatefulWidget {
-  const ProfileWidget({
+class ProfileSummaryCard extends StatefulWidget {
+  const ProfileSummaryCard({
     super.key,
     this.enableOnTap = true,
   });
@@ -12,10 +12,10 @@ class ProfileWidget extends StatefulWidget {
   final bool enableOnTap;
 
   @override
-  State<ProfileWidget> createState() => _ProfileWidgetState();
+  State<ProfileSummaryCard> createState() => _ProfileSummaryCardState();
 }
 
-class _ProfileWidgetState extends State<ProfileWidget> {
+class _ProfileSummaryCardState extends State<ProfileSummaryCard> {
   @override
   Widget build(BuildContext context) {
     return ListTile(

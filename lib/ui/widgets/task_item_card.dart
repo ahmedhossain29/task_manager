@@ -1,34 +1,57 @@
 import 'package:flutter/material.dart';
 
+import '../../data_network_caller/models/task.dart';
+
 class TaskItemCard extends StatelessWidget {
   const TaskItemCard({
     super.key,
+    required this.task,
   });
+
+  final Task task;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16,vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Title here will be here',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
-            const Text('description'),
-            const Text('Date : 12-12-2023'),
+            Text(
+              task.title ?? ' ',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+            Text(task.description ?? ''),
+            Text('Date :${task.createdDate}'),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Chip(label: Text('New',style: TextStyle(color: Colors.white),),backgroundColor: Colors.blue,),
-                Wrap(children: [
-                  IconButton(onPressed: (){}, icon: const Icon(Icons.delete_outline_sharp),),
-                  IconButton(onPressed: (){}, icon: const Icon(Icons.edit),),
-                ],),
+                Chip(
+                  label: Text(
+                    task.status ?? 'New',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: Colors.blue,
+                ),
+                Wrap(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.delete_outline_sharp),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.edit),
+                    ),
+                  ],
+                ),
               ],
             ),
           ],
         ),
-      ),);
+      ),
+    );
   }
 }

@@ -26,7 +26,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
     return Scaffold(
       body: SafeArea(
         child: Column(children: [
-          const ProfileWidget(),
+          const ProfileSummaryCard(),
           Expanded(
             child: BodyBackground(
               child: SingleChildScrollView(
