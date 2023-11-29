@@ -90,20 +90,23 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
               replacement: const LinearProgressIndicator(),
               child: SizedBox(
                 height: 120,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount:
-                        taskCountSummaryListModel.taskCountList?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      TaskCount taskCount =
-                          taskCountSummaryListModel.taskCountList![index];
-                      return FittedBox(
-                        child: SummaryCard(
-                          count: taskCount.sum.toString(),
-                          title: taskCount.sId ?? '',
-                        ),
-                      );
-                    }),
+                child: RefreshIndicator(
+                  onRefresh: getNewTaskList,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount:
+                          taskCountSummaryListModel.taskCountList?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        TaskCount taskCount =
+                            taskCountSummaryListModel.taskCountList![index];
+                        return FittedBox(
+                          child: SummaryCard(
+                            count: taskCount.sum.toString(),
+                            title: taskCount.sId ?? '',
+                          ),
+                        );
+                      }),
+                ),
               ),
             ),
             Expanded(
@@ -115,6 +118,15 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
                   itemBuilder: (context, index) {
                     return TaskItemCard(
                       task: taskListModel.taskList![index],
+                      onStatusChange: () {
+                        getNewTaskList();
+                      },
+                      showProgress: (inProgress) {
+                        getNewTaskInProgress = inProgress;
+                        if (mounted) {
+                          setState(() {});
+                        }
+                      },
                     );
                   },
                 ),
