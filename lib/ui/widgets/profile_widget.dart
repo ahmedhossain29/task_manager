@@ -60,3 +60,5 @@ class _ProfileSummaryCardState extends State<ProfileSummaryCard> {
     return '${AuthController.user?.firstName ?? ''} ${AuthController.user?.lastName ?? ''}';
   }
 }
+
+//profile
