@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:task_manager/ui/screen/login_screen.dart';
-import 'package:task_manager/ui/screen/pin_verification_screen.dart';
-import 'package:task_manager/ui/screen/sign_up_screen.dart';
 
 import '../widgets/body_background.dart';
 
@@ -96,7 +93,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                               MaterialPageRoute(
                                 builder: (context) => const LoginScreen(),
                               ),
-                                  (route) => false);
+                              (route) => false);
                         },
                         child: const Text(
                           'Sign In',
