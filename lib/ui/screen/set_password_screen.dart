@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/data_network_caller/network_caller.dart';
+import 'package:task_manager/data_network_caller/network_response.dart';
+import 'package:task_manager/data_network_caller/utility/urls.dart';
 import 'package:task_manager/ui/screen/login_screen.dart';
 
 import '../widgets/body_background.dart';
 
 class SetPasswordScreen extends StatefulWidget {
-  const SetPasswordScreen({super.key});
+  final String email;
+  final String pin;
+  const SetPasswordScreen({super.key, required this.email, required this.pin});
 
   @override
   State<SetPasswordScreen> createState() => _SetPasswordScreenState();
 }
 
 class _SetPasswordScreenState extends State<SetPasswordScreen> {
+
+final TextEditingController _passwordTEController =TextEditingController();
+final TextEditingController _confirmPasswordTEController =TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +53,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: _passwordTEController,
                     decoration: const InputDecoration(
                       hintText: 'Password',
                     ),
@@ -52,6 +62,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                     height: 16,
                   ),
                   TextFormField(
+                    controller: _confirmPasswordTEController,
                     decoration: const InputDecoration(
                       hintText: 'Confirm Password',
                     ),
@@ -112,4 +123,22 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
       ),
     );
   }
+Future<void> verifyEmail() async {
+  
+    NetworkResponse response = await NetworkCaller().postRequest(Urls.setPassword,body: {
+    "email":widget.email,
+    "OTP":widget.pin,
+    "password":_confirmPasswordTEController.text.trim(),
+    });
+
+    if (response.statusCode != null && response.statusCode! == 200) {
+      if (mounted) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LoginScreen()));
+      }
+    }
+  }
+
 }

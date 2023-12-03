@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:task_manager/data_network_caller/network_caller.dart';
+import 'package:task_manager/data_network_caller/network_response.dart';
+import 'package:task_manager/data_network_caller/utility/urls.dart';
 import 'package:task_manager/ui/screen/login_screen.dart';
 import 'package:task_manager/ui/screen/set_password_screen.dart';
 import 'package:task_manager/ui/screen/sign_up_screen.dart';
@@ -8,13 +11,18 @@ import 'package:task_manager/ui/screen/sign_up_screen.dart';
 import '../widgets/body_background.dart';
 
 class PinVerificationScreen extends StatefulWidget {
-  const PinVerificationScreen({super.key});
+
+  final String email;
+  const PinVerificationScreen({super.key, required this.email});
 
   @override
   State<PinVerificationScreen> createState() => _PinVerificationScreenState();
 }
 
 class _PinVerificationScreenState extends State<PinVerificationScreen> {
+
+  String pin = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +56,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                     height: 24,
                   ),
                   PinCodeTextField(
+                    
                     backgroundColor: Colors.transparent,
                     length: 6,
                     animationType: AnimationType.fade,
@@ -67,11 +76,12 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
 
                     //controller: textEditingController,
                     onCompleted: (v) {
-                      print("Completed");
+                      pin = v;
+                      
                     },
                     onChanged: (value) {
                       print(value);
-                      setState(() {});
+                   
                     },
                     beforeTextPaste: (text) {
                       return true;
@@ -84,14 +94,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SetPasswordScreen(),
-                            ),
-                          );
-                        },
+                        onPressed: verifyEmail,
                         child: const Text('Verify')),
                   ),
                   const SizedBox(
@@ -133,5 +136,20 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> verifyEmail() async {
+  
+    final pinVerify = Urls.pinVerification(widget.email,pin);
+    NetworkResponse response = await NetworkCaller().getRequest(pinVerify);
+
+    if (response.statusCode != null && response.statusCode! == 200) {
+      if (mounted) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SetPasswordScreen (email: widget.email,pin: pinVerify,)));
+      }
+    }
   }
 }
