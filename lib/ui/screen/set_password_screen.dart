@@ -9,6 +9,7 @@ import '../widgets/body_background.dart';
 class SetPasswordScreen extends StatefulWidget {
   final String email;
   final String pin;
+
   const SetPasswordScreen({super.key, required this.email, required this.pin});
 
   @override
@@ -16,9 +17,9 @@ class SetPasswordScreen extends StatefulWidget {
 }
 
 class _SetPasswordScreenState extends State<SetPasswordScreen> {
-
-final TextEditingController _passwordTEController =TextEditingController();
-final TextEditingController _confirmPasswordTEController =TextEditingController();
+  final TextEditingController _passwordTEController = TextEditingController();
+  final TextEditingController _confirmPasswordTEController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -123,22 +124,21 @@ final TextEditingController _confirmPasswordTEController =TextEditingController(
       ),
     );
   }
-Future<void> verifyEmail() async {
-  
-    NetworkResponse response = await NetworkCaller().postRequest(Urls.setPassword,body: {
-    "email":widget.email,
-    "OTP":widget.pin,
-    "password":_confirmPasswordTEController.text.trim(),
+
+  //set password
+  Future<void> verifyEmail() async {
+    NetworkResponse response =
+        await NetworkCaller().postRequest(Urls.setPassword, body: {
+      "email": widget.email,
+      "OTP": widget.pin,
+      "password": _confirmPasswordTEController.text.trim(),
     });
 
     if (response.statusCode != null && response.statusCode! == 200) {
       if (mounted) {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => LoginScreen()));
+            context, MaterialPageRoute(builder: (context) => LoginScreen()));
       }
     }
   }
-
 }
