@@ -3,6 +3,7 @@ import 'package:task_manager/data_network_caller/network_caller.dart';
 import 'package:task_manager/data_network_caller/network_response.dart';
 import 'package:task_manager/data_network_caller/utility/urls.dart';
 import 'package:task_manager/ui/screen/login_screen.dart';
+import 'package:task_manager/ui/widgets/snack_message.dart';
 
 import '../widgets/body_background.dart';
 
@@ -20,6 +21,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   final TextEditingController _passwordTEController = TextEditingController();
   final TextEditingController _confirmPasswordTEController =
       TextEditingController();
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -74,15 +76,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                              (route) => false);
-                        },
-                        child: const Text('Confirm')),
+                        onPressed: setPassword, child: const Text('Confirm')),
                   ),
                   const SizedBox(
                     height: 45,
@@ -126,18 +120,36 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   }
 
   //set password
-  Future<void> verifyEmail() async {
+  Future<void> setPassword() async {
+    // void checkPassword() {
+    //   String enteredPassword = _passwordTEController.text.trim();
+    //   String confirmPassword = _confirmPasswordTEController.text.trim();
+    //   if (enteredPassword == confirmPassword) {
+    //     setState(() {
+    //       password = enteredPassword;
+    //     });
+    //   } else {
+    //     print('Passwords do not match. Please try again.');
+    //   }
+    // }
+
     NetworkResponse response =
         await NetworkCaller().postRequest(Urls.setPassword, body: {
       "email": widget.email,
       "OTP": widget.pin,
-      "password": _confirmPasswordTEController.text.trim(),
+      "password": _confirmPasswordTEController.text,
     });
-
-    if (response.statusCode != null && response.statusCode! == 200) {
+     print(response.jsonResponse);
+      final status = response.jsonResponse['status'] == "success";
+    if (response.isSuccess && status) {
       if (mounted) {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      }
+      else{
+        if(mounted){
+          showSnackMessage(context, 'Invalid Request');
+        }
       }
     }
   }
