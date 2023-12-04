@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:task_manager/data_network_caller/network_caller.dart';
 import 'package:task_manager/data_network_caller/network_response.dart';
 import 'package:task_manager/data_network_caller/utility/urls.dart';
 import 'package:task_manager/ui/screen/login_screen.dart';
-import 'package:task_manager/ui/screen/set_passwordfulWidget {
+import 'package:task_manager/ui/screen/set_password_screen.dart';
+import 'package:task_manager/ui/screen/sign_up_screen.dart';
+import 'package:task_manager/ui/widgets/snack_message.dart';
+
+import '../widgets/body_background.dart';
+
+class PinVerificationScreen extends StatefulWidget {
 
   final String email;
 
@@ -90,7 +97,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                        onPressed: verifyEmail,
+                        onPressed: verifyPin,
                         child: const Text('Verify')),
                   ),
                   const SizedBox(
@@ -112,7 +119,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
+                                builder: (context) => const SignUpScreen(),
                               ),
                                   (route) => false);
                         },
@@ -136,18 +143,24 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
 
 // pin Verification
 
-  Future<void> verifyEmail() async {
+  Future<void> verifyPin() async {
     final pinVerify = Urls.pinVerification(widget.email, pin);
     NetworkResponse response = await NetworkCaller().getRequest(pinVerify);
-
-    if (response.statusCode != null && response.statusCode! == 200) {
+    final status = response.jsonResponse['status'] == "success";
+    if (response.isSuccess && status) {
       if (mounted) {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    SetPasswordScreen(email: widget.email, pin: pinVerify,)));
+                    SetPasswordScreen(email: widget.email, pin: pin,)));
       }
     }
+    else{
+      if(mounted){ 
+         showSnackMessage(context, 'Invalid OTP Code');
+    }
+      }
+     
   }
 }

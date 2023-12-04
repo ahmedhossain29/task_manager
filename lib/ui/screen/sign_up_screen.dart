@@ -125,7 +125,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       validator: (String? value) {
                         if (value?.isEmpty ?? true) {
-                          return 'Enter your valid email';
+                          return 'Enter your valid password';
                         }
                         if (value!.length < 6) {
                           return 'Enter password more than 6 letters';
@@ -203,6 +203,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         "lastName": _lastNameTEController.text.trim(),
         "mobile": _mobileTEController.text.trim(),
         "password": _passwordTEController.text,
+        "photo": '',
       });
       _signUpInProgress = false;
       if (mounted) {
