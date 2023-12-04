@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/data_network_caller/models/user_model.dart';
 import 'package:task_manager/data_network_caller/network_caller.dart';
 import 'package:task_manager/data_network_caller/network_response.dart';
 import 'package:task_manager/data_network_caller/utility/urls.dart';
+import 'package:task_manager/ui/controllers/auth_controller.dart';
 import 'package:task_manager/ui/screen/pin_verification_screen.dart';
 import 'package:task_manager/ui/widgets/body_background.dart';
+import 'package:task_manager/ui/widgets/snack_message.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -106,12 +109,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final url = Urls.recoverVerifyEmail(_emailTEController.text.trim());
     NetworkResponse response = await NetworkCaller().getRequest(url);
 
-    if (response.statusCode != null && response.statusCode! == 200) {
+    final status = response.jsonResponse['status'] == "success";
+    if (response.isSuccess && status) { 
       if (mounted) {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>  PinVerificationScreen(email: _emailTEController.text.trim(),)));
+                builder: (context) => PinVerificationScreen(
+                      email: _emailTEController.text.trim(),
+                    )));
+      }
+    }
+    else{
+      if(mounted){
+        showSnackMessage(context, 'No User Found');
       }
     }
 
