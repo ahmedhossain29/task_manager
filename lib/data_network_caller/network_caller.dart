@@ -14,6 +14,7 @@ import 'network_response.dart';
 class NetworkCaller {
   Future<NetworkResponse> postRequest(String url,
       {Map<String, dynamic>? body, bool isLogin = false}) async {
+        print(body);
     try {
       Response response =
           await post(Uri.parse(url), body: jsonEncode(body), headers: {
@@ -45,9 +46,11 @@ class NetworkCaller {
         );
       }
     } catch (e) {
+      print(e);
       return NetworkResponse(
         isSuccess: false,
         errorMessage: e.toString(),
+        
       );
     }
   }
