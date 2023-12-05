@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/data_network_caller/network_response.dart';
+import 'package:task_manager/ui/widgets/snack_message.dart';
 
 import '../../data_network_caller/models/task.dart';
 import '../../data_network_caller/network_caller.dart';
@@ -23,6 +25,22 @@ class TaskItemCard extends StatefulWidget {
 }
 
 class _TaskItemCardState extends State<TaskItemCard> {
+  Future<void> deleteTaskList() async {
+    final NetworkResponse response = await NetworkCaller()
+        .getRequest(Urls.deleteTask(widget.task.sId ?? ''));
+    final status = response.jsonResponse['status'] == "success";
+    if (response.isSuccess && status) {
+      if (mounted) {
+        showSnackMessage(context, "Delete task Successfully");
+        Navigator.pop(context);
+      } else {
+        if (mounted) {
+          showSnackMessage(context, "Error");
+        }
+      }
+    }
+  }
+
   Future<void> updateTaskStatus(String status) async {
     widget.showProgress(true);
     final response = await NetworkCaller()
@@ -60,10 +78,12 @@ class _TaskItemCardState extends State<TaskItemCard> {
                 ),
                 Wrap(
                   children: [
-                    // IconButton(
-                    //   onPressed: () {},
-                    //   icon: const Icon(Icons.delete_outline_sharp),
-                    // ),
+                    IconButton(
+                      onPressed: () {
+                        deleteTask();
+                      },
+                      icon: const Icon(Icons.delete_outline_sharp),
+                    ),
                     IconButton(
                       onPressed: () {
                         showUpdateStatusModal();
@@ -113,6 +133,34 @@ class _TaskItemCardState extends State<TaskItemCard> {
                   ),
                 ],
               )
+            ],
+          );
+        });
+  }
+
+  void deleteTask() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Delete Task'),
+            actions: [
+              TextButton(
+                onPressed: deleteTaskList,
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.blueGrey),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.blueGrey),
+                ),
+              ),
             ],
           );
         });
