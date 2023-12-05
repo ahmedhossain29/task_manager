@@ -178,15 +178,15 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
           MaterialPageRoute(builder: (context) => const MainBottomNavScreen()),
         );
+      }
+    } else {
+      if (response.statusCode == 401) {
+        if (mounted) {
+          showSnackMessage(context, 'Please check email or password');
+        }
       } else {
-        if (response.statusCode == 401) {
-          if (mounted) {
-            showSnackMessage(context, 'Please check email or password');
-          }
-        } else {
-          if (mounted) {
-            showSnackMessage(context, 'Login failed. Try again');
-          }
+        if (mounted) {
+          showSnackMessage(context, 'Login failed. Try again');
         }
       }
     }

@@ -7,6 +7,8 @@ class Urls {
   static const String registration = '$_baseUrl/registration';
   static const String login = '$_baseUrl/login';
   static const String createNewTask = '$_baseUrl/createTask';
+
+  static String deleteTask(String taskID) => '$_baseUrl/deleteTask/$taskID';
   static const String getTaskStatusCount = '$_baseUrl/taskStatusCount';
   static String getNewTasks =
       '$_baseUrl/listTaskByStatus/${TaskStatus.New.name}';
@@ -27,9 +29,8 @@ class Urls {
   static String recoverVerifyEmail(String email) =>
       '$_baseUrl/RecoverVerifyEmail/$email';
 
-   static String pinVerification(String email, String pin) =>
+  static String pinVerification(String email, String pin) =>
       '$_baseUrl/RecoverVerifyOTP/$email/$pin';
 
-   static String setPassword =
-      '$_baseUrl/RecoverResetPass';   
+  static String setPassword = '$_baseUrl/RecoverResetPass';
 }

@@ -45,4 +45,14 @@ class AuthController {
     await sharedPreferences.clear();
     token = null;
   }
+
+//   static UserModel _checkUserPhoto(UserModel model){
+//     if (model.photo != null && model.photo!.startsWith('data:image')) {
+//       // Remove data URI prefix if present
+//       model.updatePhoto( model.photo!.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '')) ;
+//
+//     } return model;
+//   }
+//
+// }
 }
