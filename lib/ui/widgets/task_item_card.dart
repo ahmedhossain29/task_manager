@@ -33,6 +33,7 @@ class _TaskItemCardState extends State<TaskItemCard> {
       if (mounted) {
         showSnackMessage(context, "Delete task Successfully");
         Navigator.pop(context);
+        widget.onStatusChange();
       } else {
         if (mounted) {
           showSnackMessage(context, "Error");
@@ -40,6 +41,13 @@ class _TaskItemCardState extends State<TaskItemCard> {
       }
     }
   }
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   deleteTaskList();
+  // }
 
   Future<void> updateTaskStatus(String status) async {
     widget.showProgress(true);

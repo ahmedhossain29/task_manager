@@ -69,13 +69,15 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const AddNewTaskScreen(),
             ),
           );
+          getTaskCountSummaryList();
+          getNewTaskList();
         },
         child: const Icon(Icons.add),
       ),
@@ -119,6 +121,7 @@ class _NewTasksScreenState extends State<NewTasksScreen> {
                     return TaskItemCard(
                       task: taskListModel.taskList![index],
                       onStatusChange: () {
+                        getTaskCountSummaryList();
                         getNewTaskList();
                       },
                       showProgress: (inProgress) {
