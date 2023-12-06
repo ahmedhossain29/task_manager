@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:task_manager/ui/screen/splash_screen.dart';
 
 //Theme Data
@@ -10,7 +11,7 @@ class TaskManagerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       navigatorKey: navigationKey,
       home: const SplashScreen(),
       theme: ThemeData(
